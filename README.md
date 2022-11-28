@@ -22,4 +22,7 @@ Del 1 - DevOps prinsipper
 
 ### Del 3 - Docker
 #### oppgave 1.
+#### oppgave 2.
+#### oppgave 3.
+Beskriv deretter med egne ord hva sensor må gjøre for å få sin fork til å laste opp container image til sitt eget ECR repo.
 

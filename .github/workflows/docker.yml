@@ -1,7 +1,7 @@
 # Jim; I'm giving up on this docker thing. It just fails ,and I've spent about six weeks on this...
 name: Docker build and push to ECR
 on:
-  push:
+  pull_request:
     branches: [ master ]
 
 jobs:
@@ -19,6 +19,7 @@ jobs:
         run: |
           aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 244530008913.dkr.ecr.eu-west-1.amazonaws.com
           rev=$(git rev-parse --short HEAD)
+          ecrrepositoryname=1009
           docker build . -t 1009_exam_container
-          docker tag 1009_exam_container 244530008913.dkr.ecr.eu-west-1.amazonaws.com/1009:$rev
-          docker push 244530008913.dkr.ecr.eu-west-1.amazonaws.com/1009:$rev
+          docker tag 1009_exam_container 244530008913.dkr.ecr.eu-west-1.amazonaws.com/$ecrrepositoryname:$rev
+          docker push 244530008913.dkr.ecr.eu-west-1.amazonaws.com/$ecrrepositoryname:$rev

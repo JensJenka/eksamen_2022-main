@@ -3,6 +3,8 @@ name: Docker build and push to ECR
 on:
   pull_request:
     branches: [ master ]
+  push:
+    branches: [ master ]
 
 jobs:
   build_docker_image:

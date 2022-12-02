@@ -72,3 +72,10 @@ Feature-branchen vil fortsatt kjøre jobben 'build' som sjekker om tester kjøre
 
 Beskriv deretter med egne ord hva sensor må gjøre for å få sin fork til å laste opp container image til sitt eget ECR repo.
 
+
+### Del 5.
+#### oppgave 1.
+Terraform prøver å opprette en bucket som allerede eksiterer fordi bøttenavnet er hardkodet til varablen "analytics" + candidate_id, som alltid vil være det samme.     
+Så hver gang workflowen kjører, så lages den samme bucketen. I dette tilfellet er terraform konfiguert til å lage en ny bucket hver gang workflowen blir kjørt, en mer devops
+orientert løsning på å lage ressurser hver gang, ville vært å lage et nytt object som blir puttet i den allerede eksisterende bucketen.
+

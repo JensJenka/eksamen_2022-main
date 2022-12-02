@@ -8,6 +8,6 @@ terraform {
   backend "s3" {
     bucket = "anal-1009"
     key    = "1009/demo.state"
-    region = "eu-north-1"
+    region = "eu-west-1"
   }
 }

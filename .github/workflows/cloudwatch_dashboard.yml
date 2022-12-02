@@ -5,6 +5,7 @@ on:
 jobs:
   terraform:
     name: "Terraform"
+    needs: build_docker_image
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -13,17 +14,27 @@ jobs:
       CANDIDATE_ID: 1009
       CANDIDATE_EMAIL: jeje004@student.kristiania.no
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
 
       - name: Terraform Init
         id: init
         run: terraform init
 
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
       - name: Terraform Plan
         id: plan
-        run: terraform plan  -var="candidate_id=$CANDIDATE_ID" -var="candidate_email=CANDIDATE_EMAIL" -no-color
+        run: terraform plan -no-color
         continue-on-error: false
 
       - name: Terraform Apply

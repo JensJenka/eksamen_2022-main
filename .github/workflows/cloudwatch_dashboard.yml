@@ -30,5 +30,8 @@ jobs:
         run: terraform plan  -var="candidate_id=$CANDIDATE_ID" -var="candidate_email=CANDIDATE_EMAIL" -no-color
         continue-on-error: false
 
+      - name: Terraform Import
+        run: import aws_s3_bucket.analyticsbucket analytics-1009 -var="candidate_id=$CANDIDATE_ID" -var="candidate_email=$CANDIDATE_EMAIL" -auto-approve
+
       - name: Terraform Apply
         run: terraform apply -var="candidate_id=$CANDIDATE_ID" -var="candidate_email=$CANDIDATE_EMAIL"  -auto-approve

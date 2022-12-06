@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = var.candidate_id
 ## Jim; seriously! we can use any word here.. How cool is that?
-  dashboard_body = <<1009
+  dashboard_body = <<onezerozeronine
 {
   "widgets": [
     {
@@ -25,5 +25,5 @@ resource "aws_cloudwatch_dashboard" "main" {
     }
   ]
 }
-1009
+onezerozeronine
 }

@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +67,7 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
 
         // Verdi av total
         Gauge.builder("carts_count", cartService.getAllsCarts(),
-                b -> b.stream().count()).register(meterRegistry);
+                b -> (long) new ArrayList<>(b).size()).register(meterRegistry);
 
         // Denne meter-typen "Gauge" rapporterer hvor mye penger som totalt finnes i banken
 /*        Gauge.builder("bank_sum", theBank,

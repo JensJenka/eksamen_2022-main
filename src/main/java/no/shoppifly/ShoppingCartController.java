@@ -1,18 +1,27 @@
 package no.shoppifly;
 
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController()
-public class ShoppingCartController {
+public class ShoppingCartController implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     private final CartService cartService;
 
-    public ShoppingCartController(CartService cartService) {
+    private MeterRegistry meterRegistry;
+
+    public ShoppingCartController(CartService cartService, MeterRegistry meterRegistry) {
         this.cartService = cartService;
+        this.meterRegistry = meterRegistry;
     }
 
     @GetMapping(path = "/cart/{id}")
@@ -52,4 +61,20 @@ public class ShoppingCartController {
     }
 
 
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+
+        // Verdi av total
+        Gauge.builder("carts_count", cartService.getAllsCarts(),
+                b -> b.stream().count()).register(meterRegistry);
+
+        // Denne meter-typen "Gauge" rapporterer hvor mye penger som totalt finnes i banken
+/*        Gauge.builder("bank_sum", theBank,
+                        b -> b.values()
+                                .stream()
+                                .map(Account::getBalance)
+                                .mapToDouble(BigDecimal::doubleValue)
+                                .sum())
+                .register(meterRegistry);*/
+    }
 }

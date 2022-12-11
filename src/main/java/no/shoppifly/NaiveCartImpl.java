@@ -1,5 +1,6 @@
 package no.shoppifly;
 
+import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -15,7 +16,7 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
 
     private final Map<String, Cart> shoppingCarts = new HashMap<>();
 
-    private final LongAdder checkedOutCartsCount = new LongAdder();
+    private final LongAdder checkedoutCounter = new LongAdder();
     private MeterRegistry meterRegistry;
 
     public NaiveCartImpl(MeterRegistry meterRegistry) {
@@ -37,9 +38,10 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
     }
 
     @Override
+    @Timed(value = "checkout_latency")
     public String checkout(Cart cart) {
         shoppingCarts.remove(cart.getId());
-        checkedOutCartsCount.increment();
+        checkedoutCounter.increment();
         return UUID.randomUUID().toString();
     }
 
@@ -69,11 +71,10 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
                             .map(i -> i.getUnitPrice() * i.getQty()))
                     .reduce(0f, Float::sum);
 
-            // Return the calculated total value
             return totalValue;
         }).register(meterRegistry);
 
-        Gauge.builder("checkout_count", checkedOutCartsCount,
+        Gauge.builder("checkout_count", checkedoutCounter,
                 b -> b.longValue()).register(meterRegistry);
 
     }

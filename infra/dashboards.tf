@@ -52,7 +52,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         "metrics": [
           [
             "${var.candidate_id}",
-            "checkout_count.value"
+            "checkout_count.count"
           ]
         ],
         "period": 300,

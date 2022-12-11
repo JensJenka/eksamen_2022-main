@@ -14,6 +14,7 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
 
     private final Map<String, Cart> shoppingCarts = new HashMap<>();
 
+    private long checkedOutCartsCount = 0;
     private MeterRegistry meterRegistry;
 
     public NaiveCartImpl(MeterRegistry meterRegistry) {
@@ -37,6 +38,7 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
     @Override
     public String checkout(Cart cart) {
         shoppingCarts.remove(cart.getId());
+        checkedOutCartsCount++;
         return UUID.randomUUID().toString();
     }
 
@@ -69,5 +71,8 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
             // Return the calculated total value
             return totalValue;
         }).register(meterRegistry);
+
+        Gauge.builder("checkout_count", () ->checkedOutCartsCount)
+                .register(meterRegistry);
     }
 }

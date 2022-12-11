@@ -51,6 +51,7 @@ Unresolved compilation problem:
         at no.shoppifly.CartServiceTest.shouldRemoveCartAfterCheckout(CartServiceTest.java:13)
 ```
 
+
 ### Bonusoppgave - 5 Poeng
 
 Vi fant aldi ut av hvorfor ovnernevnte problem oppstår av og til med Maven i Cloud9. Hvis du klarer å reprodusere feilen konsekvent

@@ -81,16 +81,18 @@ da jeg slutter med å pushe direkte på master, og heller lager en feature-branc
 Feature-branchen vil fortsatt kjøre jobben 'build' som sjekker om tester kjøres og programmet kompileres hver gang det pushes til feature-branch, men man vil spare run-time minutter i AWS. Da feature-branch slipper
 å kjøre 'build_docker_image' på hver eneste push, men kun når det pulles på master-branch.
 
+### Del 4.
+#### oppgave 1.
+Jeg har fått til at javakoden repporterer 3 av 4 metrics. Klarte ikke å få koden til å rapportere checkout latency.
 
 
 ### Del 5.
 #### oppgave 1.
 Terraform prøver å opprette en bucket som allerede eksiterer fordi bøttenavnet er hardkodet til varablen "analytics" + candidate_id, som alltid vil være det samme. Det blir aldri lagt til noe unikt hver gang terraform Apply'er, og S3 buckets må være unike.    
 Så hver gang workflowen kjører, så lages den samme bucketen. I dette tilfellet er terraform konfiguert til å lage en ny bucket hver gang workflowen blir kjørt, en mer devops
-orientert løsning på å lage ressurser hver gang, ville vært å lage et nytt object som blir puttet i den allerede eksisterende bucketen.
+orientert løsning på å lage ressurser hver gang, ville vært å konfigurert terraform til å bruke den samme bøtta.
 
-Jeg har gjort et svært ærlig forsøk på å prøve å få terreform til å kunne kjøres flere ganger uten å opprette ressurser hver gang.   
-Ta en titt på cloudwatch_dashboard, under Import for hva jeg har tenkt og forsøkt på.
+
 
 #### oppgave 2.   
 Ved å legge til denne linja under Terraform Apply: 
@@ -101,8 +103,9 @@ Ved å legge til denne linja under Terraform Plan:
    if: github.event_name == 'pull_request'
    - Kjører vi plan kun når det lages et pull request.
 
-#### oppgave 3. && Alarmer
-Jeg har desverre vært syk under siste del av året, så jeg har ikke hatt anledning til å være å være i forelesning, ei heller hatt    
-muligheten til å gi alt og gå all inn på zoom. Jeg har desverre ikke så mye å bidra med på Cloudwatch-delen av eksamen. Har
-fått til å lage et dashboard med hjelp av dashboard.tf vell og merke. 
+#### oppgave 3.
+Cloudwatch_dashboardet er kodet riktig slik at workflowen kjører vellykket, vær gang den kjører.
+Itillegg lager den disse 4 widgetsene, vell og merke er det kun number of carts, value of all carts og number of checked out carts.
+Antall handlekurver går opp og ned, toal sum med penger i handlekurven går også opp og ned.
+
 

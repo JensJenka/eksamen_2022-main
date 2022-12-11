@@ -1,5 +1,6 @@
 [![CI pipeline with Maven](https://github.com/JensJenka/eksamen_2022-main/actions/workflows/ci.yml/badge.svg)](https://github.com/JensJenka/eksamen_2022-main/actions/workflows/ci.yml)
 [![Docker build and push to ECR](https://github.com/JensJenka/eksamen_2022-main/actions/workflows/docker.yml/badge.svg)](https://github.com/JensJenka/eksamen_2022-main/actions/workflows/docker.yml)
+[![Terraform CloudWatch](https://github.com/JensJenka/eksamen_2022-main/actions/workflows/cloudwatch_dashboard.yml/badge.svg)](https://github.com/JensJenka/eksamen_2022-main/actions/workflows/cloudwatch_dashboard.yml)
 
 Final PGR301 Exam - Kandidatnummer: 1009
 

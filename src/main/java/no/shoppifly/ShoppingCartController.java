@@ -66,8 +66,7 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
 
         // Verdi av total
-        Gauge.builder("carts_count", cartService.getAllsCarts(),
-                b -> (long) new ArrayList<>(b).size()).register(meterRegistry);
+
 
         // Denne meter-typen "Gauge" rapporterer hvor mye penger som totalt finnes i banken
 /*        Gauge.builder("bank_sum", theBank,

@@ -1,15 +1,20 @@
 package no.shoppifly;
 
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 
 @Component
-class NaiveCartImpl implements CartService {
+class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReadyEvent> {
 
     private final Map<String, Cart> shoppingCarts = new HashMap<>();
 
+    private MeterRegistry meterRegistry;
     @Override
     public Cart getCart(String id) {
         return shoppingCarts.get(id);
@@ -41,5 +46,12 @@ class NaiveCartImpl implements CartService {
                 .flatMap(c -> c.getItems().stream()
                         .map(i -> i.getUnitPrice() * i.getQty()))
                 .reduce(0f, Float::sum);
+    }
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+
+        Gauge.builder("carts_count", shoppingCarts,
+                b -> b.values().size()).register(meterRegistry);
     }
 }

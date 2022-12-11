@@ -3,8 +3,8 @@
 resource "aws_s3_bucket" "analyticsbucket" {
   bucket = "analytics-${var.candidate_id}"
 
-  tags = {
+/*  tags = {
     Name        = "tagsName-testbucket-1009"
     Environment = "Dev"
-  }
+  }*/
 }

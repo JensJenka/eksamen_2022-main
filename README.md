@@ -4,8 +4,21 @@
 Final PGR301 Exam - Kandidatnummer: 1009
 
 ### Del 1 - DevOps prinsipper
+•Det er flere utfordringer med dagens utviklingsprosess. Fra før i dag var man nødt til å manuelt gå inn på GitHub Actions for å kunne kjøre continuous integration(fra nå av CI) workflowen. Docker workflowen er ikke konguerert riktig og kjøres ikke automatisk. Dette er sikk i strid med devops prinsippet om automatikk. Grunnmuren til devops er å kunne kontinuerlig levere og integrere kode. En del av å kontinuerlig levere er at gjentagende arbeidsoppgaver automatiseres, og å automatisere verifiseringen av test-vellykkethet og kompilering er et minimumskrav. En del av å kunne kontinuerlig integrere er at test-vellykketheten er representativ for funksjonaliteten til løsningen. Så langt har applikasjonen kun en test, så om de så hadde fått CI til å kjøre automatisk ville ikke det være et representativt bilde på hvorvidt applikasjonen fortsatt kjører. Itilegg brytes både kontinuerlig levering og integrerings prinsippet der.
 
+•Devops går ut på å korte ned systemets utviklingsprosess og muligheten til å kontinuerlig utvikle kode til produksjon. DevOps fasiliterer for å utvikle og teste mindre seksjoner med kode, som problemfritt kan integreres i eksisterende kodebase. For at disse prinsippene skal realiseres i shopifly er man først og fremst nødt til å presse frem en større test-dekkning. Produsere tester som verifiserer at funksjonaliteten til løsningen er operasjonell. Fra der ville man satt opp en fungerende og automatisk continuous integration workflow som et statussymbol på det. For å ta det videre derifra ville man satt opp en docker workflow som pushet et container image til eksempelhvis et ECR repository. For at koden skal komme ditt, er CI nødt til verifisere gitte kodebit, og så skal docker worflowen produsere et container image basert på det, og pushe det til et remote ECR-repository.
 
+•Dersom de hadde gjort det kunne de økt frekvensen av leveranser opp til hver dag, minimert ustabilitet i systemet, redusert ledetiden til ny funksjonalitet, skrelt av et par QA-og-test-ansatte og fått automatiske tilbakemeldinger på applikasjonens tilstand.   
+•Ved å senke leveranse hyppigheten og øke kontroll og QA bryter man fort med flere devops prinsipper. Det bryter med ende til ende prinsippet, hvor utviklerene ikke vil være involvert gjennom kodens livssyklus. Det bryter med prinsippet om delt ansvar, da kontroll og QA vil ta ansvar for kvaliteten til koden du har produsert. Det bryter med automasjonsprinsippet, da det vil være mange øyne og mange stopp for en kodebit fra utvikling til produksjon. Det bryter med kontinuerlig forbedring, fordi du som utvikler vil ha langt vanskeligere for å forbedre deg da det ikke er deg som forbedrer din kode.    
+
+•En bedre tilnærming fra et devops perspektiv ville vært å implementere muligheten til å måle hvorvidt det er fremskritt i riktig rettning for applikasjonen. Det gjøres ved å implementere metrics i eksempelvis aws cloudwatch.
+Der får man automatiske tilbakemeldingen ved å måle viktige metrics ved applikasjonen som gir verdifull innsikt i tilstanden til komponentene som blir pushet til produksjon, 
+og applikasjonens helhetlig tilstand. Målingen av en applikasjons metrics vil gi et klart bilde på tilstanden og "helsa" til applikasjonen. Ettersom man ofte tar stilling 
+til mindre blokker med kode vil fallgruver og bugs være lettere å identifisere, raskere å fikse, og resultere i kortere nedetid.
+
+•Ved at teamet leverer fra seg kode til en annen avdeling for drift, resulterer det i en holdningskultur hvor det ofte er greit bare er å bli "ferdig" og få noe til å fungere minimalt. Fordi utviklerene ikke kommer til å se koden igjen.  Dersom Shopifly hadde fulgt devops prinsippet som handler om delt ansvar, ville det vært annerledes. Det burde være et delt ansvar mellom utviklerene og drifterne av en IT-løsning. Dette hadde ført til at utviklere vil ha et delt ansvar for drifting og vedlikehold av hele løsningen, itillegg til utviklingen. Dette gir utviklerne et større overblikk over hvilket produksjonskrav ny kode har. Det vil også gi utviklerene innsyn i hvilket funksjonelle krav løsningen behøver fra et operasjonelt perspektiv.         
+
+•Devops fokuserer på at alle på teamet skal ha en bedrifts-orientert tankemåte, ved å fjerne unødvendig kommunikasjonslag mellom utviklere, driftere og interessenter, gir det utviklerene større motivasjon til å ta eierskap for prosjektet og bli drevet fremover av bedriftens suksess. Samtidig, ved å jobbe i et devops orientert team, setter man pris på muligheten til å dele verdifull informasjon med andre. Det å være flink til å dele tilbakemedlinger, beste måter å gjøre ting på og kunnskap, innad i et team, skaper en form for kollektiv kunnskaps-database og fjerner sosiale begrensninger. Dette gjør hele teamet mer skikket for vanskelige prosesser, motgang og problemer. En fri informasjonsflyt og insentiveringen av det, blir lettere dersom man jobber på samme avdeling, og dersom alle jobber med "alt". Disse egenskapene ved et team vil føre til at det automatisk, kontinuerlig forbedrer seg selv.    
 
 
 
@@ -55,9 +68,8 @@ Jim har også konfigurert workflowen til å liksom finne ut hvor det remote repo
 Det må gjøres som steg 2. ovenfor. Via en image tag, i metadata-action.
 Det å definere hvilken versjon av JDK som skal brukes i workflowen er helt unødvendig. Det skal defineres i Dockerfile, så skal prosjektet så pakkes og bygges der, som workflowene så skal få bygge og runne på.
 
-
-Beskriv hva du må gjøre for å få workflow til å fungere med din DockerHub konto? Hvorfor feiler workflowen?
 #### oppgave 2.
+Dette er gjort i prosjektet, god lesing:P
 
 #### oppgave 3.
 For at sensor skal kunne laste opp container image til sitt eget ECR-repository må man skrifte verdi på variablen 'ecrrepositoryname'(linje 22 ish) i docker.yml til navnet til sensor sitt ECR-repo.
@@ -70,12 +82,27 @@ Feature-branchen vil fortsatt kjøre jobben 'build' som sjekker om tester kjøre
 å kjøre 'build_docker_image' på hver eneste push, men kun når det pulles på master-branch.
 
 
-Beskriv deretter med egne ord hva sensor må gjøre for å få sin fork til å laste opp container image til sitt eget ECR repo.
-
 
 ### Del 5.
 #### oppgave 1.
 Terraform prøver å opprette en bucket som allerede eksiterer fordi bøttenavnet er hardkodet til varablen "analytics" + candidate_id, som alltid vil være det samme. Det blir aldri lagt til noe unikt hver gang terraform Apply'er, og S3 buckets må være unike.    
 Så hver gang workflowen kjører, så lages den samme bucketen. I dette tilfellet er terraform konfiguert til å lage en ny bucket hver gang workflowen blir kjørt, en mer devops
 orientert løsning på å lage ressurser hver gang, ville vært å lage et nytt object som blir puttet i den allerede eksisterende bucketen.
+
+Jeg har gjort et svært ærlig forsøk på å prøve å få terreform til å kunne kjøres flere ganger uten å opprette ressurser hver gang.   
+Ta en titt på cloudwatch_dashboard, under Import for hva jeg har tenkt og forsøkt på.
+
+#### oppgave 2.   
+Ved å legge til denne linja under Terraform Apply: 
+if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+   - Kjører vi apply kun når noen gjør et push mot main branch.
+
+Ved å legge til denne linja under Terraform Plan:
+   if: github.event_name == 'pull_request'
+   - Kjører vi plan kun når det lages et pull request.
+
+#### oppgave 3. && Alarmer
+Jeg har desverre vært syk under siste del av året, så jeg har ikke hatt anledning til å være å være i forelesning, ei heller hatt    
+muligheten til å gi alt og gå all inn på zoom. Jeg har desverre ikke så mye å bidra med på Cloudwatch-delen av eksamen. Har
+fått til å lage et dashboard med hjelp av dashboard.tf vell og merke. 
 

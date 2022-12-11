@@ -53,10 +53,21 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
                 .reduce(0f, Float::sum);
     }
 
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
 
         Gauge.builder("carts_count", shoppingCarts,
                 b -> b.values().size()).register(meterRegistry);
+
+        Gauge.builder("carts_value", shoppingCarts, b -> {
+            float totalValue = b.values().stream()
+                    .flatMap(c -> c.getItems().stream()
+                            .map(i -> i.getUnitPrice() * i.getQty()))
+                    .reduce(0f, Float::sum);
+
+            // Return the calculated total value
+            return totalValue;
+        }).register(meterRegistry);
     }
 }

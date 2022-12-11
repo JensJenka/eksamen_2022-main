@@ -15,6 +15,11 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
     private final Map<String, Cart> shoppingCarts = new HashMap<>();
 
     private MeterRegistry meterRegistry;
+
+    public NaiveCartImpl(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+    }
+
     @Override
     public Cart getCart(String id) {
         return shoppingCarts.get(id);

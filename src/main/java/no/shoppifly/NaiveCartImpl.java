@@ -73,6 +73,8 @@ class NaiveCartImpl implements CartService, ApplicationListener<ApplicationReady
             return totalValue;
         }).register(meterRegistry);
 
-        Gauge.builder("checkout_count", checkedOutCartsCount, LongAdder::sum).register(meterRegistry);
+        Gauge.builder("checkout_count", checkedOutCartsCount,
+                b -> b.longValue()).register(meterRegistry);
+
     }
 }
